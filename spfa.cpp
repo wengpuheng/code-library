@@ -14,6 +14,11 @@ namespace SPFA {
 	int d[N];
 	bool inq[N];  
 
+	void init() {
+		//...
+		// e -> clear
+	}
+
 	void addedge(int u, int v, int d) {
 	    e[u].push_back(edge(v, d)); 
 	    e[v].push_back(edge(u, d)); 
