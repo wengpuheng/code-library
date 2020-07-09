@@ -5,7 +5,7 @@ using namespace std;
 namespace T{
     const int N = 100005; 
     //...
-    int dfn[N], low[N], belong[N], sta[N],, cnt, tot, id; 
+    int dfn[N], low[N], belong[N], sta[N], cnt, tot, id; 
     bool insta[N]; 
     vector<int> e[N]; 
     void init() {
