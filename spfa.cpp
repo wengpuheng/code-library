@@ -25,7 +25,10 @@ namespace SPFA {
 	}
 
 	int dis(int s, int t) {
-	    for (int i = s; i <= t; ++i) d[i] = INT_MAX, inq[i] = 0; 
+	    for (int i = s; i <= t; ++i) {
+			d[i] = INT_MAX;
+			inq[i] = 0;
+		} 
 	    queue<int> q;
 	    d[s] = 0; 
 	    inq[s] = 1; 
