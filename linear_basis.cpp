@@ -3,7 +3,9 @@
 using namespace std;
 
 namespace LB {
-	void upd(int xr) {
+	int bs[35]; 
+	//...
+	void add(int xr) {
 		for (int i = 30; i >= 0; --i) {
 			if (xr >> i) {
 				if (!bs[i]) {
