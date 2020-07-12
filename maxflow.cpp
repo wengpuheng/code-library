@@ -4,62 +4,62 @@ using namespace std;
 
 namespace MaxFlow {
     const int N = 205; 
-    const int M = 50005; 
     //...
-    int s, t; 
     struct edge {
-        int v, c, nxt; 
-    }e[M]; 
-    int adj[N], tail; 
-    void init(int ns, int nt) {
-        s = ns;
-        t = nt; 
-        tail = 0; 
+        int v, c, opp; 
+        edge() {}
+        edge(int _v, int _c, int _opp) {
+            v = _v; 
+            c = _c; 
+            opp = _opp; 
+        }
+    }; 
+    vector<edge> e[N]; 
+    queue<int> q;
+    int h[N]; 
+    int s, t; 
+    void init(int _s, int _t) {
+        s = _s; 
+        t = _t; 
         for (int i = s; i <= t; ++i) {
-            adj[i] = -1; 
-        } 
+            e[i].clear(); 
+        }
     }
     void addedge(int u, int v, int c) {
-        e[tail].v = v; e[tail].c = c; 
-        e[tail].nxt = adj[u]; adj[u] = tail; ++tail; 
-        e[tail].v = u; e[tail].c = 0; 
-        e[tail].nxt = adj[v]; adj[v] = tail; ++tail;  
+        e[u].push_back(edge(v, c, e[v].size())); 
+        e[v].push_back(edge(u, 0, e[u].size() - 1)); //directed edge
     }
-    int d[N]; 
-    bool bfs() {
-        queue<int> q; 
+    bool bfs() { 
         for (int i = s; i <= t; ++i) {
-            d[i] = -1; 
+            h[i] = -1; 
         }
-        d[s] = 0; 
+        h[s] = 0; 
         q.push(s);
         while (!q.empty()) {
             int u = q.front(); 
-            for (int k = adj[u]; k != -1; k = e[k].nxt) {
-                int v = e[k].v; 
-                if (e[k].c > 0 && d[v] == -1) {
-                    d[v] = d[u] + 1; 
-                    q.push(v); 
+            for (auto &it: e[u]) { 
+                if (it.c > 0 && h[it.v] == -1) {
+                    h[it.v] = h[u] + 1; 
+                    q.push(it.v); 
                 }
             }
             q.pop(); 
         }
-        return d[t] != -1; 
+        return h[t] != -1; 
     }
     int dfs(int u, int flow) {
         if (u == t) return flow; 
         int delta, mn; 
         delta = 0; 
-        for (int k = adj[u]; k != -1; k = e[k].nxt) {
-            int v = e[k].v; 
-            if (d[v] == d[u] + 1 && e[k].c > 0 && delta < flow) {
-                mn = dfs(v, min(e[k].c, flow - delta)); 
-                e[k].c -= mn; 
-                e[k ^ 1].c += mn; 
+        for (auto &it: e[u]) { 
+            if (h[it.v] == h[u] + 1 && it.c > 0 && delta < flow) {
+                mn = dfs(it.v, min(it.c, flow - delta)); 
+                it.c -= mn; 
+                e[it.v][it.opp].c += mn; 
                 delta += mn; 
             }
         } 
-        if (!delta) d[u] = -1; 
+        if (!delta) h[u] = -1; 
         return delta; 
     }
     int maxFlow() {
