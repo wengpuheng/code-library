@@ -1,3 +1,3 @@
 # Code Library
 
-Prepare for ACM/ICPC Competition.
+Prepare for ACM/ICPC.
